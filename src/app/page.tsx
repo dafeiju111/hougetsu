@@ -35,7 +35,10 @@ return (
         {/* Reading area */}
         <div className="w-[70%] h-full p-6 flex flex-col">
             <div className="flex justify-between items-center mb-4">
-                <h1 className="text-2xl font-bold text-slate-800">AI-reader</h1>
+                <h1 className="text-4xl font-[family-name:var(--font-quicksand)] font-extrabold tracking-tight">
+                    <span className="text-blue-900">Hou</span>
+                    <span className="text-[#8b7355]">getsu</span>
+                </h1>
                 <Button onClick={handleFileUpload}>simulation</Button>
             </div>
 
