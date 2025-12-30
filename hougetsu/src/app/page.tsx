@@ -8,16 +8,24 @@ import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import InputView from"@/components/InputView";
 
+// define paragraph export function
+interface paragraph{
+    id: string;
+    original: string;
+    translation: string;
+    status: "idle"|"loading"|"success"|"error";
+    isShowingTranslation : boolean;
+}
+
 export default function Homepage(){
     //save articles to local storage for test
     const [content, setContent] = useState<string>("段落やtxtファイル、epubファイルをアップロードしてください");
     //save client selected text to storage
     const [selectedText, setSelectedText] = useState<string>("");
     // if is read mode
-    const [isReading, setIsReading] = useState<string>("");
-    //input text area value
-    const [tempInput, setTempInput] = useState<string>("");
-
+    const [isReading, setIsReading] = useState<boolean>(false);
+    //translated paragraphs
+    const [paragraphs, setParagraphs] = useState<paragraph[]>([]);
     //for test
     const handleFileUpload = () =>{
     setContent(
@@ -39,6 +47,36 @@ export default function Homepage(){
     }
     };
 
+const handleProcess = (text:string) => {
+    // split text into paragraphs, and filter out empty lines
+    const segments = text.split('\n')
+    .map(line => line.trim())
+    .filter(line => line.length > 0);
+
+    //console.log("--- test ---", segments);
+
+    // change string into paragraph
+    const newParagraphs:paragraph[] = segments.map((line,index) => ({
+        id: `para-${Date.now()}-${index}`,
+        original: line,
+        translation:"",
+        status:'idle',
+        isShowingTranslation:false
+    }));
+
+    setParagraphs(newParagraphs);
+    setIsReading(true);
+}
+
+// change original text / translation text
+const toggleTranslation = (id:string) => {
+    setParagraphs((prev) =>
+        prev.map((p) =>
+        p.id === id ? {
+            ...p, isShowingTranslation: !p.isShowingTranslation} : p
+        )
+    );
+};
 
 
 return (
@@ -55,7 +93,7 @@ return (
 
             <Card className="flex-1 overflow-hidden shadow-md">
                 <InputView
-                    onProcess={(text) => console.log("text to process:",text)}
+                    onProcess={handleProcess}
                     onSelect={handleMouseUp}
                 />
             </Card>

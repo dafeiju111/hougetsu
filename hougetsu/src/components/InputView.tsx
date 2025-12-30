@@ -28,13 +28,25 @@ export default function InputView({onProcess,onSelect}: InputViewProps){
                 </div>
             </div>
 
-            <Button
-            onClick = {() => onProcess(tempInput)}
-            disabled={!tempInput.trim()}
-            className="bg-blue-900 hover:bg-blue-800"
-            >
+            <div className="flex justify-end gap-2 mt-2">
+            
+                <Button 
+                    variant="outline"
+                    onClick = {() => setTempInput("")}
+                    disabled={!tempInput.trim()}
+                    className="text-slate-500 border-slate-200"
+                >
+                Clear
+                </Button>
+
+                <Button
+                    onClick = {() => onProcess(tempInput)}
+                    disabled={!tempInput.trim()}
+                    className="bg-blue-900 hover:bg-blue-800"
+                >
                 Process Text
-            </Button>
+                </Button>
+            </div>
         </div>
     );
 }
