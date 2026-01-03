@@ -4,9 +4,9 @@ import OpenAI from "openai";
 
 export async function POST(req: Request) {
 
-  // 调试：打印环境变量是否存在（不要打印出具体内容，只看是否存在）
-  console.log("--- 环境变量探测 ---");
-  console.log("DEEPSEEK_KEY 是否存在:", !!process.env.DEEPSEEK_API_KEY);
+  // debug
+  console.log("--- detect enviroment ---");
+  console.log("DEEPSEEK_KEY is exit:", !!process.env.DEEPSEEK_API_KEY);
   console.log("MODEL_TYPE:", process.env.NEXT_PUBLIC_TRANSLATION_MODEL);
   console.log("-------------------");
 

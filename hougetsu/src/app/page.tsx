@@ -9,15 +9,15 @@ import { Textarea } from "@/components/ui/textarea";
 import InputView from"@/components/InputView";
 import ReadingView from"@/components/ReadingView";
 import {fetchTranslation} from "@/lib/translate";
-
-// define paragraph export function
-export interface paragraph{
-    id: string;
-    original: string;
-    translation: string;
-    status: "idle"|"loading"|"success"|"error";
-    isShowingTranslation : boolean;
-}
+import {processTextToParagraphs, Paragraph } from '@/lib/textProcessor';
+import {getStoryBackground} from '@/lib/getBackground';
+// define language type
+const SUPPORTED_LANGUAGES = [
+    {label : "Japanese", value : "ja"},
+    {label : "English", value : "en"},
+    {label : "Chinese", value : "zh"},
+    {label : "Korean", value : "ko"},
+]
 
 export default function Homepage(){
     //save articles to local storage for test
@@ -27,13 +27,20 @@ export default function Homepage(){
     // if is read mode
     const [isReading, setIsReading] = useState<boolean>(false);
     //translated paragraphs
-    const [paragraphs, setParagraphs] = useState<paragraph[]>([]);
+    const [paragraphs, setParagraphs] = useState<Paragraph[]>([]);
     //for test
     const handleFileUpload = () =>{
     setContent(
         "吾輩は猫である。名前はまだ無い。"
     );
     };
+    // define background from AI
+    const [storyContext, setStoryContext] = useState<any>(null);
+    // add language selection
+    const [sourceLang, setSourceLang] = useState("ja");
+    const [targetLang, setTargetLang] = useState("zh");
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
+    const [shouldAnalyze, setShouldAnalyze] = useState(true);
 
     const handleMouseUp = () => {
     const selection = window.getSelection();
@@ -49,25 +56,30 @@ export default function Homepage(){
     }
     };
 
-const handleProcess = (text:string) => {
-    // split text into paragraphs, and filter out empty lines
-    const segments = text.split('\n')
-    .map(line => line.trim())
-    .filter(line => line.length > 0);
-
-    console.log("--- test ---", segments);
-
-    // change string into paragraph
-    const newParagraphs:paragraph[] = segments.map((line,index) => ({
-        id: `para-${Date.now()}-${index}`,
-        original: line,
-        translation:"",
-        status:'idle',
-        isShowingTranslation:false
-    }));
-
+const handleProcess = async (text:string) => {
+    if (!text.trim()) return;
+    const newParagraphs = processTextToParagraphs(text);
     setParagraphs(newParagraphs);
+
+    if (shouldAnalyze) {
+        setIsAnalyzing(true);
+        try {
+            const contextData = await getStoryBackground(text, targetLang);
+            setStoryContext(contextData);
+            console.log("AI Analysis Success:", contextData);
+        } catch (error) {
+            console.error("AI Analysis Error:", error);
+            // Fallback: Continue without context if analysis fails
+        } finally {
+            setIsAnalyzing(false);
+        }
+    } else {
+        setStoryContext(null); 
+    }
+
     setIsReading(true);
+    
+    
 }
 
 // change original text / translation text
@@ -121,6 +133,9 @@ return (
                     <InputView
                         onProcess={handleProcess}
                         onSelect={handleMouseUp}
+                        isAnalyzing={isAnalyzing}
+                        shouldAnalyze={shouldAnalyze}
+                        onToggleAnalyze={setShouldAnalyze}
                     />
                 ) : (
                     <ReadingView
