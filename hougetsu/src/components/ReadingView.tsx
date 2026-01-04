@@ -3,11 +3,11 @@
 import React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import {paragraph} from "@/app/page";
+import {Paragraph} from "@/lib/textProcessor";
 import { Loader2 } from "lucide-react";
 
 interface ReadingViewProps{
-    paragraphs: paragraph[];
+    paragraphs: Paragraph[];
     onToggle:(id:string) => void;
     onBack: () => void;
     onSelect:() => void;

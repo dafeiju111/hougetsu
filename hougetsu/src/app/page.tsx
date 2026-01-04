@@ -173,27 +173,27 @@ return (
                 <div className="flex items-center gap-3 bg-white p-1.5 rounded-2xl border border-slate-200 shadow-sm">
                     {/* source language */}
                     <select 
-                    value={sourceLang}
-                    onChange={(e) => setSourceLang(e.target.value)}
-                    className="bg-transparent text-sm font-medium px-3 py-1.5 focus:outline-none cursor-pointer hover:text-blue-600 transition-colors"
+                        value={sourceLang}
+                        onChange={(e) => setSourceLang(e.target.value)}
+                        className="bg-transparent text-sm font-medium px-3 py-1.5 focus:outline-none cursor-pointer hover:text-blue-600 transition-colors"
                     >
-                    {SUPPORTED_LANGUAGES.map(lang => (
-                        <option key={lang.value} value={lang.value}>{lang.label}</option>
-                    ))}
+                        {SUPPORTED_LANGUAGES.map(lang => (
+                            <option key={lang.value} value={lang.value}>{lang.label}</option>
+                        ))}
                     </select>
-                    <div className="text-slate-400">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                    </div>
+                        <div className="text-slate-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                        </div>
 
                     {/* translate language */}
                     <select 
-                    value={targetLang}
-                    onChange={(e) => setTargetLang(e.target.value)}
-                    className="bg-transparent text-sm font-medium px-3 py-1.5 focus:outline-none cursor-pointer hover:text-[#8b7355] transition-colors"
+                        value={targetLang}
+                        onChange={(e) => setTargetLang(e.target.value)}
+                        className="bg-transparent text-sm font-medium px-3 py-1.5 focus:outline-none cursor-pointer hover:text-[#8b7355] transition-colors"
                     >
-                    {SUPPORTED_LANGUAGES.map(lang => (
-                        <option key={lang.value} value={lang.value}>{lang.label}</option>
-                    ))}
+                        {SUPPORTED_LANGUAGES.map(lang => (
+                            <option key={lang.value} value={lang.value}>{lang.label}</option>
+                        ))}
                     </select>
                 </div>
             </div>
