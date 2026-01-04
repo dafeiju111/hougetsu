@@ -12,7 +12,7 @@ export async function POST(req: Request) {
 
 
   try {
-    const { text, targetLang, sourceLang, context } = await req.json();
+    const { text, targetLang, sourceLang, context, contextBefore } = await req.json();
     const model = process.env.NEXT_PUBLIC_TRANSLATION_MODEL;
 
     if (model === 'deepseek') {
@@ -121,6 +121,14 @@ export async function POST(req: Request) {
         - 风格/人称提示: ${context.style_hint}
         请在翻译过程中严格遵守以上设定，确保译文中的术语和语气在整部作品中保持一致。`;
       }
+
+      let referenceBlock = ""
+      if((contextBefore && contextBefore.length > 0)){
+        referenceBlock = `
+          ### 周边上下文 (仅供参考，请勿翻译):
+          ${contextBefore?.length > 0 ? `[前文内容]:\n${contextBefore.join('\n')}\n` : ""}---
+        `;
+      }
       const finalSystemPrompt = `${langInstruction}\n${contextPrompt}`;
       const completion = await openai.chat.completions.create({
       model: "deepseek-chat", 
@@ -131,7 +139,7 @@ export async function POST(req: Request) {
         },
         { 
           role: "user", 
-          content: text 
+          content: `${referenceBlock}### 待翻译目标 (TARGET):\n${text}`
        }
     ],
  

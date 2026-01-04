@@ -12,6 +12,8 @@ export const fetchTranslation = async (
   context:any,
   sourceLang: string,
   targetLang: string,
+  contextBefore: string[],
+  contextAfter: string[]
 ): Promise<string> => {
   const response = await fetch('/api/translate', {
     method: 'POST',
